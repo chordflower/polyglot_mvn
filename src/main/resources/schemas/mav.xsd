@@ -1,0 +1,1651 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" id="mav"
+           xmlns="https://chordflower.cc/schemas/maven" targetNamespace="https://chordflower.cc/schemas/maven"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:simplify="http://jaxb2-commons.dev.java.net/basic/simplify"
+           jaxb:extensionBindingPrefixes="simplify">
+  <xs:element name="project" type="Model">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[The `project` element is the root of the descriptor.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="Model">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[The `project` element is the root of the descriptor.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="parent" type="Parent">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The location of the parent project, if one exists. Values from the parent
+            project will be the default for this project if they are left unspecified. The location is given as a group ID, artifact ID and version.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="packaging" type="xs:string" default="jar">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+            The type of artifact this project produces, for example `jar`, `war`, `ear` or `pom`.
+            Plugins can create their own packaging, and therefore their own packaging types, so this list does not contain all possible types.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="name" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The full name of the project.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="description" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[A detailed description of the project, used by Maven whenever it needs to
+            describe the project, such as on the web site. You can also use CDATA with markdown inside.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="url" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+            The URL to the project's homepage.
+            **Default value is**: parent value [+ path adjustment] + (artifactId or project.directory property).
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="inceptionYear" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The year of the project's inception, specified with 4 digits. This value is
+            used when generating copyright notices as well as being informational.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="organization" type="Organization">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[This element describes various attributes of the organization to which the
+            project belongs. These attributes are utilized when documentation is created (for copyright notices and links).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="licenses">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+            This element describes all of the licenses for this project.
+            Each license is described by a `license` element, which is then described by additional elements.
+            Projects should only list the license(s) that applies to the project and not the licenses that apply to dependencies.
+            If multiple licenses are listed, it is assumed that the user can select any of them, not that they must accept all.
+          ]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="license" minOccurs="0" maxOccurs="unbounded" type="License"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="developers">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Describes the committers of a project.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="developer" minOccurs="0" maxOccurs="unbounded" type="Developer"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="contributors">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Describes the contributors to a project that are not yet committers.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="contributor" minOccurs="0" maxOccurs="unbounded" type="Contributor"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="mailingLists">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Contains information about a project's mailing lists.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="mailingList" minOccurs="0" maxOccurs="unbounded" type="MailingList"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="modules">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The modules (sometimes called subprojects) to build as a part of this project.
+            Each module listed is a relative path to the directory containing the module.
+            To be consistent with the way default urls are calculated from parent, it is recommended to have module names match artifact ids.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="module" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="scm" type="Scm">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Specification for the SCM used by the project, such as git, mercurial, etc.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="issueManagement" type="IssueManagement">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The project's issue management system information.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="ciManagement" type="CiManagement">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The project's continuous integration information.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="distributionManagement" type="DistributionManagement">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Distribution information for a project that enables deployment of the site and artifacts to remote web servers and repositories respectively.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="properties">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Properties that can be used throughout the POM as a substitution, and are used as filters in resources if enabled.
+            The format is `property name="name" value="value"/property`.
+          ]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="property" minOccurs="0" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:attribute name="name" type="xs:string" use="required"/>
+                <xs:attribute name="value" type="xs:string" use="required"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="dependencyManagement">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Default dependency information for projects that inherit from this one. The
+            dependencies in this section are not immediately resolved. Instead, when a POM derived from this one declares a dependency
+            described by a matching groupId and artifactId, the version and other values from this section are used for that dependency if they were not
+            already specified.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="dependency" minOccurs="0" maxOccurs="unbounded" type="Dependency"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="dependencies">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[This element describes all of the dependencies associated with a project.
+          These dependencies are used to construct a classpath for your project
+          during the build process. They are automatically downloaded from the
+          repositories defined in this project. See [the dependency mechanism][]
+          for more information.
+
+            [the dependency mechanism]: https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html
+          ]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="dependency" minOccurs="0" maxOccurs="unbounded" type="Dependency"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="repositories">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The lists of the remote repositories for discovering dependencies and extensions.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="repository" minOccurs="0" maxOccurs="unbounded" type="Repository"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="pluginRepositories">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The lists of the remote repositories for discovering plugins for builds and reports.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="pluginRepository" minOccurs="0" maxOccurs="unbounded" type="Repository"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="build" type="Build">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Information required to build the project.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="reporting" type="Reporting">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+            This element includes the specification of report plugins to use to generate the reports on the Maven-generated site.
+            These reports will be run when a user executes `mvn site`. All of the reports will be included in the navigation bar for browsing.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="profiles">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[A listing of project-local build profiles which will modify the build process when activated.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="profile" minOccurs="0" maxOccurs="unbounded" type="Profile"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="modelVersion" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[Declares to which version of project descriptor this POM conforms.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="groupId" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[A universally unique identifier for a project. It is normal to use a fully-qualified package name to distinguish it from other projects with a similar name (eg. `org.apache.maven`).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="artifactId" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The identifier for this artifact that is unique within the group given by the
+          group ID. An artifact is something that is either produced or used by a project. Examples of artifacts produced by Maven for a project include: JARs, source and binary distributions, and WARs.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="version" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The current version of the artifact produced by this project.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="License">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[Describes the licenses for this project. This is used to generate the license
+        page of the project's web site, as well as being taken into consideration in other reporting and validation. The licenses listed for the project are that of the project itself, and not
+        of dependencies.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="url" type="xs:anyURI">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The official url for the license text. Note that the license page of maven site will include the output of this url verbatim]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="distribution" type="dist">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+          The primary method by which this project may be distributed:
+
+          - repo: may be downloaded from the Maven repository
+          - manual: user must manually download and install the dependency.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="comments" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Addendum information pertaining to this license.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The full legal name of the license.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:simpleType name="dist">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="repo"/>
+      <xs:enumeration value="manual"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="CiManagement">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[The `CiManagement` element contains informations required to the continuous integration system of the project.]]></xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="system" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The name of the continuous integration system, e.g. `travis-ci`.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="url" type="xs:anyURI">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[URL for the continuous integration system used by the project if it has a web interface.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Scm">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[The `scm` element contains informations required to the SCM (Source Control Management) of the project.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="connection" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+The source control management system URL that describes the repository and how to connect to the repository. For more information, see the [URL format][] and [list of supported SCMs][]. This connection is read-only.
+**Default value**: parent value \[+ path adjustment\] + (artifactId or project.directory property).
+
+  [URL format]: https://maven.apache.org/scm/scm-url-format.html
+  [list of supported SCMs]: https://maven.apache.org/scm/scms-overview.html
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="developerConnection" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+Just like `connection`, but for developers, i.e. this scm connection will not be read only. **Default value is**: parent value [+ path adjustment] + (artifactId or project.directory property).
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="tag" type="xs:string" default="HEAD">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The tag of current code. By default, it's set to HEAD during development.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="url" type="xs:anyURI">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+The URL to the project's browsable SCM repository, such as ViewVC or Fisheye.
+**Default value is**: parent value [+ path adjustment] + (artifactId or project.directory property).
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="IssueManagement">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[Information about the issue tracking (or bug tracking) system used to manage this project.]]></xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="system" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The name of the issue management system, e.g. Jira]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="url" type="xs:anyURI">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[URL for the issue management system used by the project.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="DependencyManagement">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[Section for management of default dependency information for use in a group of POMs.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="dependencies">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The dependencies specified here are not used until they are referenced in a POM within the group. This allows the specification of a "standard" version for a particular dependency.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="dependency" minOccurs="0" maxOccurs="unbounded" type="Dependency"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="Dependency">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[The `dependency` element contains information about a dependency of the project.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="exclusions">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Lists a set of artifacts that should be excluded from this dependency's artifact list when it comes to calculating transitive dependencies.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="exclusion" minOccurs="0" maxOccurs="unbounded" type="Exclusion"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="optional" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[Indicates the dependency is optional for use of this library. While the
+          version of the dependency will be taken into account for dependency calculation if the library is used elsewhere, it will not be passed on transitively. Default value is false.
+        ]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="groupId" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The project group that produced the dependency, e.g. `org.apache.maven`.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="artifactId" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The unique id for an artifact produced by the project group, e.g. `maven-artifact`.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="version" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The version of the dependency, e.g. `3.2.1`. In Maven 2, this can also be specified as a range of versions.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="type" type="xs:string" default="jar">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[
+The type of dependency, that will be mapped to a file extension, an optional classifier, and a few other attributes. Some examples are
+`jar`, `war`, `ejb-client` and `test-jar`: see [default artifact handlers][] for a list. New types can be defined by extensions, so this
+is not a complete list.
+
+  [default artifact handlers]: ../maven-core/artifact-handlers.html
+        ]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="classifier" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[
+The classifier of the dependency. It is appended to the filename after the version. This allows:
+
+-   referring to attached artifact, for example `sources` and `javadoc`: see [default artifact handlers][] for a list,
+-   distinguishing two artifacts that belong to the same POM but were built differently. For example, `jdk14` and `jdk15`.
+
+  [default artifact handlers]: ../maven-core/artifact-handlers.html
+          ]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="scope" type="scope">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[
+The scope of the dependency - `compile`, `runtime`, `test`, `system`, and `provided`. Used to calculate the various classpaths used for compilation, testing, and so on.
+It also assists in determining which artifacts to include in a distribution of this project. For more information, see [the dependency mechanism][]. The default scope is `compile`.
+
+  [the dependency mechanism]: https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html
+        ]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:simpleType name="scope">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="compile"/>
+      <xs:enumeration value="runtime"/>
+      <xs:enumeration value="test"/>
+      <xs:enumeration value="system"/>
+      <xs:enumeration value="provided"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="Exclusion">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[The `exclusion` element contains informations required to exclude an artifact to the project.]]></xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="artifactId" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The artifact ID of the project to exclude.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="groupId" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The group ID of the project to exclude.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Parent">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[
+The `parent` element contains information required to locate the parent project from which this project will inherit from.
+
+**Note:** The children of this element are not interpolated and must be given as literal values.
+      ]]></xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="groupId" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The group id of the parent project to inherit from.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="artifactId" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The artifact id of the parent project to inherit from.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="version" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The version of the parent project to inherit.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="relativePath" type="xs:string" default="../pom.xml">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[
+          The relative path of the parent `pom.xml` file within the check out.
+          If not specified, it defaults to `../pom.xml`.
+          Maven looks for the parent POM first in this location on the filesystem, then the local repository, and lastly in the remote repo.
+          `relativePath` allows you to select a different location, for example when your structure is flat, or deeper without an intermediate parent POM.
+          However, the group ID, artifact ID and version are still required, and must match the file in the location given or it will revert to the repository for the POM.
+          This feature is only for enhancing the development in a local checkout of that project.
+          Set the value to an empty string in case you want to disable the feature and always resolve the parent POM from the repositories.
+        ]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Developer">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[Information about one of the committers on this project.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="name" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The full name of the contributor.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="email" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The email address of the contributor.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="url" type="xs:anyURI">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The URL for the homepage of the contributor.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="organization" type="Organization">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The organization to which the contributor belongs.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="roles">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+The roles the contributor plays in the project. Each role is described by a `role` element, the body of which is a role name. This can also be used to describe the contribution.
+          ]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="role" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="timezone" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+The timezone the contributor is in. Typically, this is a number in the range [-12][] to [+14][] or a valid time zone id like "America/Montreal" (UTC-05:00) or "Europe/Paris" (UTC+01:00).
+
+  [-12]: http://en.wikipedia.org/wiki/UTC%E2%88%9212:00
+  [+14]: http://en.wikipedia.org/wiki/UTC%2B14:00
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="properties">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Properties about the contributor, such as an instant messenger handle.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:any minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="id" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The unique ID of the developer in the SCM.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="MailingList">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[This element describes all of the mailing lists associated with a project. The auto-generated site references this information.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="subscribe" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The email address or link that can be used to subscribe to the mailing list.
+          If this is an email address, a `mailto:` link will automatically be created when the documentation is created.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="unsubscribe" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The email address or link that can be used to unsubscribe to
+            the mailing list.  If this is an email address, a `mailto:` link will automatically be created when the documentation is created.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="post" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The email address or link that can be used to post to
+          the mailing list.  If this is an email address, a `mailto:` link will automatically be created when the documentation is created.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="archive" type="xs:anyURI">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The link to a URL where you can browse the mailing list archive.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="otherArchives">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The link to alternate URLs where you can browse the list archive.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="otherArchive" minOccurs="0" maxOccurs="unbounded" type="xs:anyURI"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The name of the mailing list.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Contributor">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[Description of a person who has contributed to the project, but who does not have commit privileges. Usually, these contributions come in the form of patches submitted.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="email" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The email address of the contributor.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="url" type="xs:anyURI">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The URL for the homepage of the contributor.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="organization" type="Organization">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The organization to which the contributor belongs.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="roles">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The roles the contributor plays in the project. Each role is described by a `role` element, the body of which is a role name. This can also be used to describe the contribution.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="role" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="timezone" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+The timezone the contributor is in. Typically, this is a number in the range [-12][] to [+14][] or a valid time zone id like "America/Montreal" (UTC-05:00) or "Europe/Paris" (UTC+01:00).
+
+  [-12]: http://en.wikipedia.org/wiki/UTC%E2%88%9212:00
+  [+14]: http://en.wikipedia.org/wiki/UTC%2B14:00
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="properties">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Properties about the contributor, such as an instant messenger handle.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:any minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The full name of the contributor.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Organization">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[Specifies the organization that produces this project.]]></xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The full name of the organization.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="url" type="xs:anyURI">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The URL to the organization's home page.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="DistributionManagement">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[This elements describes all that pertains to distribution for a project. It is primarily used for deployment of artifacts and the site produced by the build.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="repository" type="DeploymentRepository">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Information needed to deploy the artifacts generated by the project to a remote repository.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="snapshotRepository" type="DeploymentRepository">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Where to deploy snapshots of artifacts to. If not given, it defaults to the `repository` element.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="site" type="Site">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Information needed for deploying the web site of the project.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="downloadUrl" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+The URL of the project's download page. If not given users will be referred to the homepage given by `url`.
+This is given to assist in locating artifacts that are not in the repository due to licensing restrictions.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="relocation" type="Relocation">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Relocation information of the artifact if it has been moved to a new group ID and/or artifact ID.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="DeploymentRepository">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[Repository contains the information needed for deploying to the remote repository.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="releases" type="RepositoryPolicy">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[How to handle downloading of releases from this repository.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="snapshots" type="RepositoryPolicy">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[How to handle downloading of snapshots from this repository.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="uniqueVersion" type="xs:boolean" default="true">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[Whether to assign snapshots a unique version comprised of the timestamp and build number, or to use the same version each time]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="id" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[
+            A unique identifier for a repository. This is used to match the repository to configuration in the `settings.xml` file, for example. Furthermore, the identifier is
+            used during POM inheritance and profile injection to detect repositories that should be merged.
+          ]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[Human readable name of the repository.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="url" type="xs:anyURI" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The url of the repository, in the form `protocol://hostname/path`.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="layout" default="default" type="layout">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[
+            The type of layout this repository uses for locating and storing artifacts - can be `legacy` or `default`.
+          ]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:simpleType name="layout">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="legacy"/>
+      <xs:enumeration value="default"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="RepositoryPolicy">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[Download policy.]]></xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="updatePolicy" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The frequency for downloading updates - can be `always`, `daily` (default), `interval:XXX` (in minutes) or `never` (only if it doesn't exist locally).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="enabled" type="xs:boolean" default="true">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[Whether to use this repository for downloading this type of artifact. Default value is `true`.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="checksumPolicy" default="warn" type="checksumPolicy">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[What to do when verification of an artifact checksum fails. Valid values are `ignore`, `fail` or `warn` (the default).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:simpleType name="checksumPolicy">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ignore"/>
+      <xs:enumeration value="fail"/>
+      <xs:enumeration value="warn"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="Relocation">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[Describes where an artifact has moved to. If any of the values are omitted, it is assumed to be the same as it was before.]]></xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="groupId" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The group ID the artifact has moved to.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="artifactId" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The new artifact ID of the artifact.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="version" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The new version of the artifact.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="message" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[An additional message to show the user about the move, such as the reason.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Site">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[Contains the information needed for deploying websites.]]></xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="id" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[A unique identifier for a deployment location. This is used to match the site to configuration in the `settings.xml` file, for example.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[Human readable name of the deployment location.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="url" type="xs:anyURI">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[
+The url of the location where website is deployed, in the form `protocol://hostname/path`.
+**Default value is**: parent value [+ path adjustment] + (artifactId or project.directory property)
+        ]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Reporting">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[Section for management of reports and their configuration.]]></xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded" type="ReportPlugin">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The reporting plugins to use and their configuration.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="excludeDefaults" type="xs:boolean" default="false">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[
+            If true, then the default reports are not included in the site generation.
+            This includes the reports in the "Project Info" menu. Default value is `false`.
+          ]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="outputDirectory" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[Where to store all of the generated reports. The default is `${project.build.directory}/site`.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="ReportPlugin">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[The `plugin` element contains informations required for a report plugin.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="reportSets">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Multiple specifications of a set of reports, each having (possibly) different configuration. This is the reporting parallel to an `execution` in the build.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="reportSet" minOccurs="0" maxOccurs="unbounded" type="ReportSet"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="configuration">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+The configuration as DOM object.
+By default, every element content is trimmed, but starting with Maven 3.1.0, you can add \`xml:space="preserve"\` to elements you want to preserve whitespace.
+You can control how child POMs inherit configuration from parent POMs by adding `combine.children` or `combine.self` attributes to the children of the configuration element:
+
+-   `combine.children`: available values are `merge` (default) and `append`,
+-   `combine.self`: available values are `merge` (default) and `override`.
+          ]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:any minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="groupId" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The group ID of the reporting plugin in the repository.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="artifactId" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The artifact ID of the reporting plugin in the repository.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="version" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The version of the reporting plugin to be used.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="inherited" type="xs:boolean" default="true">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[Whether any configuration should be propagated to child POMs. Default value is `true`.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="ReportSet">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[Represents a set of reports and configuration to be used to generate them.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="reports">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The list of reports from this plugin which should be generated from this set.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="report" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="configuration">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+The configuration as DOM object.
+By default, every element content is trimmed, but starting with Maven 3.1.0, you can add \`xml:space="preserve"\` to elements you want to preserve whitespace.
+You can control how child POMs inherit configuration from parent POMs by adding `combine.children` or `combine.self` attributes to the children of the configuration element:
+
+-   `combine.children`: available values are `merge` (default) and `append`,
+-   `combine.self`: available values are `merge` (default) and `override`.
+          ]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:any minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="id" type="xs:string" default="default">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The unique id for this report set, to be used during POM inheritance and profile injection for merging of report sets.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="inherited" type="xs:boolean" default="true">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[ Whether any configuration should be propagated to child POMs. Default value is `true`.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Profile">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[Modifications to the build process which is activated based on environmental parameters or command line arguments.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="activation" type="Activation">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The conditional logic which will automatically trigger the inclusion of this profile.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="build" type="BuildBase">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Information required to build the project.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="modules">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The modules (sometimes called subprojects) to build as a part of this project. Each module listed is a relative path to the directory containing the module.
+            To be consistent with the way default urls are calculated from parent, it is recommended to have module names match artifact ids.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="module" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="distributionManagement" type="DistributionManagement">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Distribution information for a project that enables deployment of the site and artifacts to remote web servers and repositories respectively.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="properties">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Properties that can be used throughout the POM as a substitution, and are used as filters in resources if enabled. The format is `<property name="name" value="value"/>`.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="property" minOccurs="0" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:attribute name="name" type="xs:string" use="required"/>
+                <xs:attribute name="value" type="xs:string" use="required"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="dependencyManagement">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Default dependency information for projects that inherit from this one. The
+            dependencies in this section are not immediately resolved. Instead, when a POM derived from this one declares a dependency described by a matching groupId and artifactId, the
+            version and other values from this section are used for that dependency if they were not already specified.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="dependency" minOccurs="0" maxOccurs="unbounded" type="Dependency"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="dependencies">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+This element describes all of the dependencies associated with a project. These dependencies are used to construct a classpath for your
+project during the build process. They are automatically downloaded from the repositories defined in this project. See [the dependency mechanism][] for more information.
+
+  [the dependency mechanism]: https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html
+          ]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="dependency" minOccurs="0" maxOccurs="unbounded" type="Dependency"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="repositories">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The lists of the remote repositories for discovering dependencies and extensions.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="repository" minOccurs="0" maxOccurs="unbounded" type="Repository"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="pluginRepositories">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The lists of the remote repositories for discovering plugins for builds and reports.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="pluginRepository" minOccurs="0" maxOccurs="unbounded" type="Repository"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="reporting" type="Reporting">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+            This element includes the specification of report plugins to use to generate the reports on the Maven-generated site.
+            These reports will be run when a user executes `mvn site`.
+            All of the reports will be included in the navigation bar for browsing.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="id" type="xs:string" default="default">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The identifier of this build profile. This is used for command line activation, and identifies profiles to be merged.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Activation">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[The conditions within the build runtime environment which will trigger the
+      automatic inclusion of the build profile. Multiple conditions can be defined, which must be all satisfied to activate the profile.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="jdk" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+            Specifies that this profile will be activated when a matching JDK is detected. For example, `1.4` only activates on JDKs versioned 1.4,
+            while `!1.4` matches any JDK that is not version 1.4. Ranges are supported too: `[1.5,)` activates when the JDK is 1.5 minimum.
+          ]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="os" type="ActivationOS">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Specifies that this profile will be activated when matching operating system attributes are detected.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="property" type="ActivationProperty">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Specifies that this profile will be activated when this system property is specified.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="file" type="ActivationFile">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Specifies that this profile will be activated based on existence of a file.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="activeByDefault" type="xs:boolean" default="false">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[If set to true, this profile will be active unless another profile in this pom is activated using the command line -P option or by one of that profile's activators.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="ActivationProperty">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[This is the property specification used to activate a profile. If the value field
+        is empty, then the existence of the named property will activate the profile, otherwise it does a case-sensitive match against the property value as well.]]></xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The name of the property to be used to activate a profile.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="value" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The value of the property required to activate a profile.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="ActivationFile">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[This is the file specification used to activate the profile. The `missing` value
+        is the location of a file that needs to exist, and if it doesn't, the profile will be activated. On the other hand, `exists` will test for the existence of the file and if it is
+        there, the profile will be activated.
+        Variable interpolation for these file specifications is limited to `${basedir}`, System properties and request properties.]]></xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="missing" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The name of the file that must be missing to activate the profile.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="exists" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The name of the file that must exist to activate the profile.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="ActivationOS">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[This is an activator which will detect an operating system's attributes in order to activate its profile.]]></xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The name of the operating system to be used to activate the profile. This must be an exact match of the `${os.name}` Java property, such as `Windows XP`.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="family" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The general family of the OS to be used to activate the profile, such as `windows` or `unix`.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="arch" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The architecture of the operating system to be used to activate the profile.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="version" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The version of the operating system to be used to activate the profile.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Repository">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[A repository contains the information needed for establishing connections with remote repository.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="releases" type="RepositoryPolicy">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[How to handle downloading of releases from this repository.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="snapshots" type="RepositoryPolicy">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[How to handle downloading of snapshots from this repository.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="id" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[
+A unique identifier for a repository. This is used to match the repository to configuration in the `settings.xml` file, for example. Furthermore, the identifier is used during POM inheritance and profile injection to detect repositories that should be merged.
+        ]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[Human readable name of the repository.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="url" type="xs:anyURI">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The url of the repository, in the form `protocol://hostname/path`.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="layout" default="default" type="layout">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[
+            The type of layout this repository uses for locating and storing artifacts - can be `legacy` or `default`.
+          ]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="BuildBase">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[Generic informations for a build.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="resources">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[This element describes all of the classpath resources such as properties files associated with a project. These resources are often included in the final package. The default value is `src/main/resources`.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="resource" minOccurs="0" maxOccurs="unbounded" type="Resource"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="testResources">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[This element describes all of the classpath resources such as properties files associated with a project's unit tests. The default value is `src/test/resources`.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="testResource" minOccurs="0" maxOccurs="unbounded" type="Resource"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="filters">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The list of filter properties files that are used when filtering is enabled.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="filter" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="pluginManagement">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Default plugin information to be made available for reference by projects derived from this one. This plugin configuration will not be resolved or bound to the
+            lifecycle unless referenced. Any local configuration for a given plugin will override the plugin's entire definition here.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded" type="Plugin"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="plugins">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The list of plugins to use.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded" type="Plugin"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="defaultGoal" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The default goal (or phase in Maven 2) to execute when none is specified for the project.
+Note that in case of a multi-module build, only the default goal of the top-level project is relevant, i.e. the default goals of child modules are ignored. Since Maven 3, multiple goals/phases can be separated by whitespace.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="directory" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The directory where all files generated by the build are placed. The default value is `target`.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="finalName" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The filename (excluding the extension, and with no path information) that the produced artifact will be called. The default value is `${artifactId}-${version}`.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Plugin">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[The `plugin` element contains informations required for a plugin.]]></xs:documentation>
+    </xs:annotation>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:annotation>
+        <xs:appinfo>
+          <simplify:as-element-property/>
+        </xs:appinfo>
+      </xs:annotation>
+      <xs:element minOccurs="0" name="executions">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Multiple specifications of a set of goals to execute during the build lifecycle, each having (possibly) a different configuration.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="execution" minOccurs="0" maxOccurs="unbounded" type="PluginExecution"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="dependency" minOccurs="0" maxOccurs="unbounded" type="Dependency">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Additional dependencies that this project needs to introduce to the plugin's
+            classloader.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="configuration">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+The configuration as DOM object.
+By default, every element content is trimmed, but starting with Maven 3.1.0, you can add \`xml:space="preserve"\` to elements you want to preserve whitespace.
+You can control how child POMs inherit configuration from parent POMs by adding `combine.children` or `combine.self` attributes to the children of the configuration element:
+
+-   `combine.children`: available values are `merge` (default) and `append`,
+-   `combine.self`: available values are `merge` (default) and `override`.
+          ]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:any minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+    <xs:attribute name="groupId" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The group ID of the plugin in the repository.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="artifactId" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The artifact ID of the plugin in the repository.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="version" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The version (or valid range of versions) of the plugin to be used.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="extensions" type="xs:boolean" default="false">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[Whether to load Maven extensions (such as packaging and type handlers) from this plugin. For performance reasons, this should only be enabled when necessary.
+            Default value is `false`.
+          ]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="inherited" type="xs:boolean" default="true">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[Whether any configuration should be propagated to child POMs. Default value is `true`.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="PluginExecution">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[The `execution` element contains informations required for the execution of a plugin.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="goals">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The goals to execute with the given configuration.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="goal" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="configuration">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+The configuration as DOM object.
+By default, every element content is trimmed, but starting with Maven 3.1.0, you can add \`xml:space="preserve"\` to elements you want to preserve whitespace.
+You can control how child POMs inherit configuration from parent POMs by adding `combine.children` or `combine.self` attributes to the children of the configuration element:
+
+-   `combine.children`: available values are `merge` (default) and `append`,
+-   `combine.self`: available values are `merge` (default) and `override`.
+          ]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:any minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="id" type="xs:string" default="default">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The identifier of this execution for labelling the goals during the build, and for matching executions to merge during inheritance and profile injection.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="inherited" type="xs:boolean" default="true">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[Whether any configuration should be propagated to child POMs. Default value is `true`.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="phase" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The build lifecycle phase to bind the goals in this execution to. If omitted, the goals will be bound to the default phase specified by the plugin. ]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Resource">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[This element describes all of the classpath resources associated with a project or unit tests.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="includes">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[A list of patterns to include, e.g. `:**/*.xml`.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="include" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="excludes">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[A list of patterns to exclude, e.g. `**/*.xml`]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="exclude" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="targetPath" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[
+            Describe the resource target path. The path is relative to the target/classes directory (i.e. `${project.build.outputDirectory}`).
+            For example, if you want that resource to appear in a specific package (`org.apache.maven.messages`), you must specify this
+            element with this value: `org/apache/maven/messages`. This is not required if you simply put the resources in that directory
+            structure at the source, however.
+          ]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="filtering" type="xs:boolean" default="false">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[
+            Whether resources are filtered to replace tokens with parameterised values or not.
+            The values are taken from the `properties` element and from the properties in the files listed in the `filters` element. Default value is `false`.
+          ]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="directory" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[Describe the directory where the resources are stored. The path is relative to the POM.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="PluginManagement">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[Section for management of default plugin information for use in a group of POMs.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="plugins">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The list of plugins to use.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded" type="Plugin"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+  <xs:complexType name="Build">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[The `build` element contains informations required to build the project. Default values are defined in Super POM.]]></xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element minOccurs="0" name="sourceDirectories">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+            This element specifies a directory containing the source of the project.
+            The generated build system will compile the sources from this directory when the project is built.
+            The path given is relative to the project descriptor.
+            The default value is `src/main/java`.
+          ]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="sourceDirectory" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="scriptSourceDirectories">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+            This element specifies a directory containing the script sources of the
+            project. This directory is meant to be different from the sourceDirectory, in that its
+            contents will be copied to the output directory in most cases (since scripts are interpreted rather than compiled).
+            The default value is `src/main/scripts`.
+          ]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="scriptSourceDirectory" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="testSourceDirectories">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+            This element specifies a directory containing the unit test source of the
+            project. The generated build system will compile these directories when the project is
+            being tested. The path given is relative to the project descriptor.
+            The default value is `src/test/java`.
+          ]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="testSourceDirectory" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="outputDirectory" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The directory where compiled application classes are placed. The default value is `target/classes`.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="testOutputDirectory" type="xs:string">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The directory where compiled test classes are placed. The default value is `target/test-classes`.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="extensions">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[A set of build extensions to use from this project.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="extension" minOccurs="0" maxOccurs="unbounded" type="Extension"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="resources">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+            This element describes all of the classpath resources such as properties files associated with a project. These resources are often included in the final package.
+            The default value is `src/main/resources`.
+          ]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="resource" minOccurs="0" maxOccurs="unbounded" type="Resource"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="testResources">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[
+            This element describes all of the classpath resources such as properties files associated with a project's unit tests. The default value is `src/test/resources`.
+          ]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="testResource" minOccurs="0" maxOccurs="unbounded" type="Resource"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="filters">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The list of filter properties files that are used when filtering is enabled.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="filter" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="pluginManagement">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[Default plugin information to be made available for reference by projects derived from this one. This plugin configuration will not be resolved or bound to the
+            lifecycle unless referenced. Any local configuration for a given plugin will override the plugin's entire definition here.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded" type="Plugin"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="plugins">
+        <xs:annotation>
+          <xs:documentation source="description"><![CDATA[The list of plugins to use.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="plugin" minOccurs="0" maxOccurs="unbounded" type="Plugin"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="defaultGoal" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The default goal (or phase in Maven 2) to execute when none is specified for the project.
+Note that in case of a multi-module build, only the default goal of the top-level project is relevant, i.e. the default goals of child modules are ignored. Since Maven 3, multiple goals/phases can be separated by whitespace.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="directory" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The directory where all files generated by the build are placed. The default value is `target`.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="finalName" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The filename (excluding the extension, and with no path information) that the produced artifact will be called. The default value is `${artifactId}-${version}`.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="Extension">
+    <xs:annotation>
+      <xs:documentation source="description"><![CDATA[Describes a build extension to utilise.]]></xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="groupId" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The group ID of the extension's artifact.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="artifactId" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The artifact ID of the extension.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="version" type="xs:string">
+      <xs:annotation>
+        <xs:documentation source="description"><![CDATA[The version of the extension.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+</xs:schema>
